@@ -15,7 +15,7 @@ async def main() -> None:
         for fun in functions:
             await fun
 
-    async def run_parallel(*functions) -> None:
+    async def run_parallel(*functions: Awaitable[Any]) -> None:
         await asyncio.gather(*functions)
 
     # create and register a few devices
