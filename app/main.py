@@ -10,6 +10,13 @@ async def main() -> None:
     # create an IOT service
     service = IOTService()
 
+    async def run_secuence(*functions) -> None:
+        for fun in functions:
+            await fun
+
+    async def run_paralel(*functions) -> None:
+        await asyncio.gather(*functions)
+
     # create and register a few devices
     hue_light = HueLightDevice()
     speaker = SmartSpeakerDevice()
@@ -35,8 +42,12 @@ async def main() -> None:
     ]
 
     # run the programs
-    await service.run_program(wake_up_program)
-    await service.run_program(sleep_program)
+    await run_paralel(
+        run_secuence(
+            service.run_program(wake_up_program),
+            service.run_program(sleep_program)
+        )
+    )
 
 
 if __name__ == "__main__":
